@@ -3,13 +3,19 @@ export default class BilibiliAdapter {
     // this.skipReadImage = true
     this.config = config
     this.name = 'bilibili'
+    modifyRequestHeaders('api.bilibili.com/', {
+      Origin: 'https://member.bilibili.com',
+      Referer: 'https://member.bilibili.com/'
+    }, [
+      '*://api.bilibili.com/*',
+    ])
   }
 
   async getMetaData() {
     var res = await $.ajax({
       url: 'https://api.bilibili.com/x/web-interface/nav?build=0&mobi_app=web',
     })
-    if(!res.data.isLogin) {
+    if (!res.data.isLogin) {
       throw new Error('not login')
     }
     // console.log(res);
@@ -46,7 +52,7 @@ export default class BilibiliAdapter {
     //   })
     // }
 
-    var csrf = this.config.state.csrf;
+    var csrf = this.config.state.csrf
     var res = await $.ajax({
       url: 'https://api.bilibili.com/x/article/creative/draft/addupdate',
       type: 'POST',
@@ -79,13 +85,14 @@ export default class BilibiliAdapter {
     var src = file.src
     var csrf = this.config.state.csrf
 
-    var uploadUrl ='https://api.bilibili.com/x/article/creative/article/upcover'
-    var file = new File([file.bits], 'temp', {
+    var uploadUrl = 'https://api.bilibili.com/x/dynamic/feed/draw/upload_bfs'
+    var file = new File([file.bits], file.name, {
       type: file.type,
     })
     var formdata = new FormData()
-    formdata.append('binary', file)
+    formdata.append('file_up', file)
     formdata.append('csrf', csrf)
+    formdata.append('biz', 'article')
     var res = await axios({
       url: uploadUrl,
       method: 'post',
@@ -93,7 +100,7 @@ export default class BilibiliAdapter {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
 
-    if (res.data.code != 0) {
+    if (res.data.code !== 0) {
       throw new Error('图片上传失败 ' + src)
     }
     // http only
@@ -103,8 +110,8 @@ export default class BilibiliAdapter {
       {
         id: id,
         object_key: id,
-        url: res.data.data.url,
-        size: res.data.data.size,
+        url: res.data.data.image_url,
+        size: res.data.data.img_size,
         // images: [res.data],
       },
     ]
@@ -123,7 +130,8 @@ export default class BilibiliAdapter {
       const pre = pres.eq(mindex)
       try {
         pre.after(pre.html()).remove()
-      } catch (e) {}
+      } catch (e) {
+      }
     }
 
     tools.processDocCode(div)
@@ -134,7 +142,8 @@ export default class BilibiliAdapter {
       const pre = pres.eq(mindex)
       try {
         pre.remove()
-      } catch (e) {}
+      } catch (e) {
+      }
     }
 
     try {
@@ -150,7 +159,8 @@ export default class BilibiliAdapter {
       const qqm = doc.find('qqmusic')
       qqm.next().remove()
       qqm.remove()
-    } catch (e) {}
+    } catch (e) {
+    }
 
     post.content = $('<div>')
       .append(doc.clone())
@@ -163,8 +173,9 @@ export default class BilibiliAdapter {
   }
 
   addPromotion(post) {
-    var sharcode = `<blockquote><p>本文使用 <a href="https://www.bilibili.com/read/cv10352009" class="internal">文章同步助手</a> 同步</p></blockquote>`
+    var sharcode = `<blockquote><p>本文使用 <a href='https://www.bilibili.com/read/cv10352009' class='internal'>文章同步助手</a> 同步</p></blockquote>`
     post.content = post.content.trim() + `${sharcode}`
   }
+
   //   <img class="" src="http://p2.pstatp.com/large/pgc-image/bc0a9fc8e595453083d85deb947c3d6e" data-ic="false" data-ic-uri="" data-height="1333" data-width="1000" image_type="1" web_uri="pgc-image/bc0a9fc8e595453083d85deb947c3d6e" img_width="1000" img_height="1333"></img>
 }
