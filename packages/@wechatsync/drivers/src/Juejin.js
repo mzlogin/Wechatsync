@@ -25,6 +25,14 @@ export default class JuejinAdapter {
       }
     })
 
+    // pass image upload referer verify
+    modifyRequestHeaders('juejin.cn', {
+      Origin: 'https://juejin.cn',
+      Referer: 'https://juejin.cn/editor/drafts/1'
+    }, [
+      '*://juejin.cn/image/urlSave'
+    ])
+
   }
 
   async getMetaData() {
@@ -44,9 +52,27 @@ export default class JuejinAdapter {
   }
 
   async addPost(post, _instance) {
+    console.log('TurndownService', turndown)
+    var turndownService = new turndown()
+    turndownService.use(tools.turndownExt)
+    var markdown = turndownService.turndown(post.post_content)
+    const { data } = await axios.post('https://api.juejin.cn/content_api/v1/article_draft/create', {
+      brief_content: '',
+      category_id: '0',
+      cover_image: '',
+      edit_type: 10,
+      html_content: "deprecated",
+      link_url: "",
+      mark_content: markdown,
+      tag_ids: [],
+      title: post.post_title
+    })
+    var post_id = data.data.id
+    console.log(data)
     return {
       status: 'success',
-      post_id: 0,
+      post_id: post_id,
+      draftLink: 'https://juejin.cn/editor/drafts/' + post_id,
     }
   }
 
@@ -55,7 +81,8 @@ export default class JuejinAdapter {
     var turndownService = new turndown()
     turndownService.use(tools.turndownExt)
     var markdown = turndownService.turndown(post.post_content)
-    const { data } = await axios.post('https://api.juejin.cn/content_api/v1/article_draft/create', {
+    const { data } = await axios.post('https://api.juejin.cn/content_api/v1/article_draft/update', {
+      id: post_id,
       brief_content: '',
       category_id: '0',
       cover_image: '',
