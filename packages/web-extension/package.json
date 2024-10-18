@@ -5,7 +5,7 @@
   "description": "",
   "scripts": {
     "start": "webpack --watch",
-    "build": "webpack --env production",
+    "build": "webpack --env development",
     "prebuilt": "webpack --config ./scripts/webpack.packDriverCode.js && node ./scripts/stringifyCodePack.js"
   },
   "author": "fun",
