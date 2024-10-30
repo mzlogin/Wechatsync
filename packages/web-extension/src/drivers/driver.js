@@ -25,6 +25,7 @@ const {
   YuQueAdapter,
   XueQiuAdapter,
   IPFSAdapter,
+  AliyunAdapter,
 } = buildInDrivers
 
 var _cacheState = {}
@@ -42,7 +43,7 @@ export function addCustomDriver(name, driverClass) {
 export function getDriver(account) {
 
   // 保证在内置的前面
-  if(_customDrivers[account.type]) {
+  if (_customDrivers[account.type]) {
     const driverInCustom = _customDrivers[account.type]
     return new driverInCustom['handler'](account)
   }
@@ -107,6 +108,10 @@ export function getDriver(account) {
     return new JuejinAdapter(account)
   }
 
+  if (account.type == 'aliyun') {
+    return new AliyunAdapter(account)
+  }
+
   if (account.type == 'csdn') {
     return new CSDNAdapter(account)
   }
@@ -126,7 +131,7 @@ export function getDriver(account) {
     return new BaiJiaHaoAdapter(account)
   }
 
-  if(account.type == 'douban') {
+  if (account.type == 'douban') {
     console.log(account.type)
     return new DoubanAdapter({
       globalState: _cacheState,
@@ -134,7 +139,7 @@ export function getDriver(account) {
     })
   }
 
-  if(account.type == 'discuz') {
+  if (account.type == 'discuz') {
     console.log('discuz', account)
     return new DiscuzAdapter(account.config)
   }
@@ -176,7 +181,7 @@ let _lastFetch = null
 export async function getPublicAccounts() {
 
   // 限制20s 保证不会太频繁请求平台
-  if(_lastFetch != null) {
+  if (_lastFetch != null) {
     const isTooQuickly = (Date.now() - _lastFetch) < 20 * 1000
     if (isTooQuickly) {
       console.log('too quickly return by cache')
@@ -208,13 +213,14 @@ export async function getPublicAccounts() {
     new YuQueAdapter(),
     new XueQiuAdapter(),
     new IPFSAdapter(),
+    new AliyunAdapter(),
   ]
 
   var customDiscuzEndpoints = ['https://www.51hanghai.com'];
   customDiscuzEndpoints.forEach(_ => {
     drivers.push(new DiscuzAdapter({
       url: _,
-   }));
+    }));
   })
 
   Object.keys(_customDrivers).forEach(type => {
@@ -236,7 +242,7 @@ export async function getPublicAccounts() {
       const results = await Promise.all(
         stepItem.map((driver) => {
           return new Promise((resolve, reject) => {
-            driver.getMetaData().then(resolve, function() {
+            driver.getMetaData().then(resolve, function () {
               resolve(null)
             })
           })
@@ -310,7 +316,7 @@ function urlHandler(details) {
       subject: 'music',
       url: details.url,
       id: details.url.replace('https://music.douban.com/subject/', '')
-      .replace('/new_review', '')
+        .replace('/new_review', '')
     })
   }
 }
