@@ -1,16 +1,15 @@
 # 文章同步助手
 
-![](https://img.shields.io/github/v/release/wechatsync/Wechatsync.svg)
-![](https://img.shields.io/github/last-commit/wechatsync/Wechatsync)
-![](https://img.shields.io/github/issues/wechatsync/Wechatsync)
+![](https://img.shields.io/github/v/release/mzlogin/Wechatsync.svg)
+![](https://img.shields.io/github/last-commit/mzlogin/Wechatsync)
+![](https://img.shields.io/github/issues/mzlogin/Wechatsync)
 
 还在为一次编辑，N 个平台需多次排版上传脑壳疼吧？
 为广大自媒体朋友撸了个提高生产力的小工具、可以做到的在多个内容平台无缝同步。
 
 ![](snapshots/wechatsync.png)
 
-[API文档](https://github.com/wechatsync/Wechatsync/blob/master/API.md)
-
+[API文档](https://github.com/mzlogin/Wechatsync/blob/master/API.md)
 
 ## 特性
 
@@ -80,7 +79,7 @@ https://github.com/wechatsync/article-syncjs
 
 #### 开发者模式安装
 
-1. [下载](http://wpics.oss-cn-shanghai.aliyuncs.com/WechatSync.zip?date=0625) 并解压
+1. [下载](https://github.com/mzlogin/Wechatsync/releases) 并解压
 2. 打开 chrome://extensions
 3. 右上角“开启开发者模式”
 4. 拖入解压后的文件夹到浏览器插件页
@@ -123,4 +122,4 @@ https://www.v2ex.com/t/573320
 
 ## 更新日志
 
-[见这里](./docs/changelog/changelog.md)。
+[传送门](./docs/changelog/changelog.md)
