@@ -46,21 +46,26 @@
 | Typecho      | 开源CMS | 已支持 | http://typecho.org/               | HTML          | 2021/3/17 |
 | WordPress    | 开源CMS | 已支持 | https://cn.wordpress.org/         | HTML          | 2021/3/17 |
 | 搜狐焦点         | 房地产   | 已支持 | https://house.focus.cn/           | HTML          | 2021/3/17 |
+| 阿里云开发者社区| 技术社区  | 已支持 | https://developer.aliyun.com/         | Markdown,HTML | 2024/10/31 |
 
 - [待支持的平台列表](https://airtable.com/shrLSJMnTC2BlmP29)
 
 ### 兼容发布API 
-你也可以通过兼容wordpress xmlrpc协议来使你的网站支持使用文章同步助手来同步
+
+你也可以通过兼容wordpress xmlrpc协议来使你的网站支持使用文章同步助手来同步。
 
 #### PHP
+
 - [dedecms thinkphp等php后端可以伪装wordpress xmlrpc协议支持文章同步助手同步](intergrations/php/)
 
 ## 网页发起同步任务
+
 如果你是文章编辑器开发者，或自己有内容库需要同步多个渠道，引入这个JS SDK:  
 https://github.com/wechatsync/article-syncjs
 - window.syncPost(article) 拉起同步任务框
 
 ## 贡献代码
+
 - [待支持的平台列表](https://airtable.com/shrLSJMnTC2BlmP29)
 - [API文档](API.md)
 - [如何开发一个适配器](docs/toturial.md)
@@ -68,6 +73,8 @@ https://github.com/wechatsync/article-syncjs
 ## 安装方式
 
 #### Chrome 商店
+
+*初始作者原版，目前最新版本为 1.0.13*
 
 [传送门](https://chrome.google.com/webstore/detail/%E5%BE%AE%E4%BF%A1%E5%90%8C%E6%AD%A5%E5%8A%A9%E6%89%8B/hchobocdmclopcbnibdnoafilagadion)
 
@@ -116,36 +123,4 @@ https://www.v2ex.com/t/573320
 
 ## 更新日志
 
-
-
-### 0.0.9
-
-- 今日头条同步失败更明确的提示
-- 修复今日头条不因为要手机号验证不能直接发布的问题，改为同步过去是草稿
-- 解决了微信如果有外链及视频会无法同步到今日头条情况
-
-### 0.0.6
-
-- 新增 CSDN、掘金、博客园、思否等多个渠道
-- 新增 Markdown 编辑器
-
-### 0.0.5 - 2019.06.25
-
-- 修复 typecho 同步 bug
-- 修复简书同步 bug
-- 修复代码块同步 bug
-
-### 0.0.4 - 2019.06.16
-
-- 修复头条 bug、微信标题被遮挡
-- 修复代码块到知乎不换行的问题
-- 新增 typecho
-- 新增头条号
-
-### 0.0.3 - 2019.06.12
-
-- 新增简书，知乎
-
-### 0.0.2 - 2019.06.09
-
-- 新增同步详情
+[见这里](./docs/changelog/changelog.md)。

@@ -47,7 +47,7 @@ export default class JuejinAdapter {
       raw: data.data,
       supportTypes: ['markdown', 'html'],
       home: 'https://juejin.cn/editor/drafts',
-      icon: 'https://juejin.cn/favicon.ico',
+      icon: 'https://lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/static/favicons/apple-touch-icon.png',
     }
   }
 
