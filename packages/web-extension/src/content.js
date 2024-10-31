@@ -487,7 +487,7 @@ function buildStatusHtml(taskStatus) {
     console.log('all done, notify share')
     // syncCount = syncCount+1
     setCache(syncCountKey, syncCount + 1)
-    showShareTip()
+    // showShareTip()
     // $('#exampleModalCenterForShare').on('hide.bs.modal', function() {
     //   console.log('share closed')
     //   // do something…
