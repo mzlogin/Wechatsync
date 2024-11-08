@@ -8,7 +8,21 @@ export default class BilibiliAdapter {
       Referer: 'https://member.bilibili.com/'
     }, [
       '*://api.bilibili.com/*',
-    ])
+    ], function (details) {
+      if (details.initiator && details.initiator.indexOf('bilibili.com') > -1) {
+        details.requestHeaders = details.requestHeaders.map(_ => {
+          if (_.name === 'Origin') {
+            _.value = details.initiator
+          }
+
+          if (_.name === 'Referer') {
+            _.value = details.initiator + '/'
+          }
+
+          return _
+        })
+      }
+    })
   }
 
   async getMetaData() {
