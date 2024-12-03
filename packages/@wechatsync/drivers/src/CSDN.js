@@ -10,25 +10,25 @@ function createUuid() {
   });
 };
 
-function signCSDN(apiPath, contentType = 'application/json') {
-	var once = createUuid()
-  var signStr = `POST
+function signCSDN(method, apiPath, contentType = 'application/json') {
+  var once = createUuid()
+  var signStr = `${method}
 */*
 
-application/json
+${contentType}
 
 x-ca-key:203803574
 x-ca-nonce:${once}
 ${apiPath}`
-	var hash = CryptoJS.HmacSHA256(signStr, "9znpamsyl2c7cdrr9sas0le9vbc3r6ba");
-	var hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
+  var hash = CryptoJS.HmacSHA256(signStr, "9znpamsyl2c7cdrr9sas0le9vbc3r6ba");
+  var hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
   return {
     accept: '*/*',
     'content-type': contentType,
     'x-ca-key': 203803574,
     'x-ca-nonce': once,
     'x-ca-signature': hashInBase64,
-    'x-ca-signature-headers':'x-ca-key,x-ca-nonce'
+    'x-ca-signature-headers': 'x-ca-key,x-ca-nonce'
   }
 }
 
@@ -47,20 +47,23 @@ function validateFileExt(ext) {
 export default class CSDNAdapter {
   constructor() {
     this.name = 'csdn'
-    modifyRequestHeaders('bizapi.csdn.net/', {
-    	Origin: 'https://editor.csdn.net',
-      Referer: 'https://editor.csdn.net/'
-    }, [
-    	'*://bizapi.csdn.net/*',
-    ])
+    // modifyRequestHeaders('bizapi.csdn.net/', {
+    // 	Origin: 'https://editor.csdn.net',
+    //   Referer: 'https://editor.csdn.net/'
+    // }, [
+    // 	'*://bizapi.csdn.net/*',
+    // ])
   }
 
   async getMetaData() {
-    var res = await $.get('https://me.csdn.net/api/user/show')
+    var headers = signCSDN('GET', '/blog-console-api/v3/editor/getBaseInfo', '')
+    var res = await axios.get('https://bizapi.csdn.net/blog-console-api/v3/editor/getBaseInfo', {
+      headers: headers
+    })
     return {
-      uid: res.data.csdnid,
-      title: res.data.username,
-      avatar: res.data.avatarurl,
+      uid: res.data.data.muser_name,
+      title: res.data.data.muser_name,
+      avatar: res.data.data.avatar,
       type: 'csdn',
       displayName: 'CSDN',
       supportTypes: ['markdown', 'html'],
@@ -95,7 +98,7 @@ export default class CSDNAdapter {
   async uploadFile(file) {
     const uploadData = await requestUpload(file.name)
     if (!uploadData) {
-      return [{url: file.src}]
+      return [{ url: file.src }]
     }
 
     const uploadUrl = uploadData.host
@@ -119,9 +122,9 @@ export default class CSDNAdapter {
     })
     if (res.status !== 200 || res.data.code !== 200) {
       console.log(res)
-      return [{url: file.src}]
+      return [{ url: file.src }]
     }
-    return [{url: res.data.data.imageUrl}]
+    return [{ url: res.data.data.imageUrl }]
   }
 
   async addPost(post) {
@@ -131,32 +134,32 @@ export default class CSDNAdapter {
     }
   }
   async editPost(post_id, post) {
-		// 支持HTML
-    if(!post.markdown) {
+    // 支持HTML
+    if (!post.markdown) {
       var turndownService = new turndown()
-    	turndownService.use(tools.turndownExt)
-    	var markdown = turndownService.turndown(post.post_content)
-    	console.log(markdown);
-    	post.markdown = markdown
+      turndownService.use(tools.turndownExt)
+      var markdown = turndownService.turndown(post.post_content)
+      console.log(markdown);
+      post.markdown = markdown
     }
 
-		var postStruct = {
-    	    content: post.post_content,
-          markdowncontent: post.markdown,
-          not_auto_saved: "1",
-          readType: "public",
-          source: "pc_mdeditor",
-          status: 2,
-          title: post.post_title,
+    var postStruct = {
+      content: post.post_content,
+      markdowncontent: post.markdown,
+      not_auto_saved: "1",
+      readType: "public",
+      source: "pc_mdeditor",
+      status: 2,
+      title: post.post_title,
     }
-		var headers = signCSDN('/blog-console-api/v3/mdeditor/saveArticle')
+    var headers = signCSDN('POST', '/blog-console-api/v3/mdeditor/saveArticle')
     var res = await axios.post(
       'https://bizapi.csdn.net/blog-console-api/v3/mdeditor/saveArticle',
       postStruct,
       {
         headers: headers
-    })
-  	post_id = res.data.data.id
+      })
+    post_id = res.data.data.id
     console.log(res)
     return {
       status: 'success',
