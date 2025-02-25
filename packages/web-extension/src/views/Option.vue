@@ -50,7 +50,7 @@
 export default {
   data() {
     return {
-      currentVersion: '1.0.19',
+      currentVersion: '1.0.20',
       loading: false,
       activeName: 'about',
       noResult: false,
