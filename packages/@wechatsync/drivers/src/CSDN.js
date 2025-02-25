@@ -104,6 +104,16 @@ export default class CSDNAdapter {
       source: "pc_mdeditor",
       status: 2,
       title: post.post_title,
+      authorized_status: false,
+      categories: "",
+      is_new: 1,
+      level: "0",
+      original_link: "",
+      pubStatus: "draft",
+      resource_id: "",
+      resource_url: "",
+      type: "original",
+      vote_id: 0,
     }
     var headers = signCSDN('POST', '/blog-console-api/v3/mdeditor/saveArticle')
     var res = await axios.post(
